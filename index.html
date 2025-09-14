@@ -83,7 +83,7 @@
 </head>
 <body>
   <header>
-    <img src="png-transparent-cesar-vallejo-university-trujillo-trilce-club-deportivo-universidad-cesar-vallejo-logo-ucv-angle-text-rectangle.png" alt="Logo UCV">
+    <img src="logo_ucv.png" alt="Logo UCV">
     <h1>Racha Académica UCV - Huaraz</h1>
     <p>Mantén tu racha de 16 semanas completando tus tareas</p>
   </header>
