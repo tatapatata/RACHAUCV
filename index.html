@@ -11,17 +11,28 @@
       padding: 0;
       background: #f8f8f8;
       color: #333;
+      background-size: cover;
+      background-position: center;
     }
     header {
-      background: #d8232a;
+      background: rgba(216,35,42,0.9);
       color: white;
       text-align: center;
       padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header img {
+      height: 70px;
+      margin-bottom: 0.5rem;
     }
     main {
       padding: 1rem;
       max-width: 800px;
       margin: auto;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
     }
     h2 {
       color: #d8232a;
@@ -61,14 +72,31 @@
       height: 16px;
       width: 0;
     }
+    .student-info {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>🎓 Racha Académica UCV - Huaraz</h1>
+    <img src="png-transparent-cesar-vallejo-university-trujillo-trilce-club-deportivo-universidad-cesar-vallejo-logo-ucv-angle-text-rectangle.png" alt="Logo UCV">
+    <h1>Racha Académica UCV - Huaraz</h1>
     <p>Mantén tu racha de 16 semanas completando tus tareas</p>
   </header>
   <main>
+    <section class="student-info">
+      <h2>👤 Información del estudiante</h2>
+      <input type="text" id="studentName" placeholder="Nombre del estudiante" />
+      <input type="text" id="studentCycle" placeholder="Ciclo" />
+      <input type="text" id="studentCareer" placeholder="Carrera" />
+      <button onclick="saveStudentInfo()">Guardar información</button>
+      <p id="studentDisplay"></p>
+    </section>
+
     <section>
       <h2>📚 Mis Cursos</h2>
       <input type="text" id="courseInput" placeholder="Nombre del curso" />
@@ -93,17 +121,50 @@
       <h2>🔥 Racha de Semanas</h2>
       <div class="week-list" id="weekList"></div>
     </section>
+
+    <section>
+      <h2>🖼️ Personalizar Fondo</h2>
+      <input type="file" id="bgInput" accept="image/*" onchange="setBackground(event)">
+    </section>
   </main>
 
   <script>
     let courses = JSON.parse(localStorage.getItem("courses")) || [];
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
     let completedWeeks = JSON.parse(localStorage.getItem("weeks")) || 0;
+    let student = JSON.parse(localStorage.getItem("student")) || {};
 
     function saveData() {
       localStorage.setItem("courses", JSON.stringify(courses));
       localStorage.setItem("tasks", JSON.stringify(tasks));
       localStorage.setItem("weeks", JSON.stringify(completedWeeks));
+      localStorage.setItem("student", JSON.stringify(student));
+    }
+
+    function saveStudentInfo() {
+      student.name = document.getElementById("studentName").value;
+      student.cycle = document.getElementById("studentCycle").value;
+      student.career = document.getElementById("studentCareer").value;
+      saveData();
+      renderStudentInfo();
+    }
+
+    function renderStudentInfo() {
+      const display = document.getElementById("studentDisplay");
+      if (student.name || student.cycle || student.career) {
+        display.innerText = `${student.name || ''} - Ciclo: ${student.cycle || ''} - Carrera: ${student.career || ''}`;
+      }
+    }
+
+    function setBackground(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.body.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     function renderCourses() {
@@ -195,6 +256,7 @@
       }
     }
 
+    renderStudentInfo();
     renderCourses();
     renderTasks();
     renderWeeks();
